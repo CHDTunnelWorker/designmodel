@@ -33,4 +33,52 @@ public class VirtualWalletTransactionEntity {
      * 出账户id
      */
     private Long toWalletId;
+
+    public String getTransactionCode() {
+        return transactionCode;
+    }
+
+    public Long getCreateTimestamp() {
+        return createTimestamp;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public String getTypeCode() {
+        return typeCode;
+    }
+
+    public Long getFromWalletId() {
+        return fromWalletId;
+    }
+
+    public Long getToWalletId() {
+        return toWalletId;
+    }
+
+    public void setTransactionCode(String transactionCode) {
+        this.transactionCode = transactionCode;
+    }
+
+    public void setCreateTimestamp(Long createTimestamp) {
+        this.createTimestamp = createTimestamp;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
+    }
+
+    public void setFromWalletId(Long fromWalletId) {
+        this.fromWalletId = fromWalletId;
+    }
+
+    public void setToWalletId(Long toWalletId) {
+        this.toWalletId = toWalletId;
+    }
 }

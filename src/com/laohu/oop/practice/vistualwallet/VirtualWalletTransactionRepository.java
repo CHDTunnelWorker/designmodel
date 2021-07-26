@@ -8,4 +8,7 @@ package com.laohu.oop.practice.vistualwallet;
  **/
 public class VirtualWalletTransactionRepository {
 
+    public void saveTransaction(VirtualWalletTransactionEntity transactionEntity) {
+        //模拟保存交易流水数据
+    }
 }

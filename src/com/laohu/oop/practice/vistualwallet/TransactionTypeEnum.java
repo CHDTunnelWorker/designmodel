@@ -22,11 +22,11 @@ public enum TransactionTypeEnum {
         this.name = name;
     }
 
-    private String getCode() {
+    public String getCode() {
         return this.code;
     }
 
-    private String getName() {
+    public String getName() {
         return this.name;
     }
 }
