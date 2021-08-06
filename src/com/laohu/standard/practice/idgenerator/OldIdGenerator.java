@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  * @program: designmodel
- * @description: id生成器
+ * @description: id生成器 (能用版本)
  * @author: Holland
  * @create: 2021-08-06 16:47
  **/
