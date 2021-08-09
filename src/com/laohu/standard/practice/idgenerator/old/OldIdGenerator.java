@@ -1,4 +1,4 @@
-package com.laohu.standard.practice.idgenerator;
+package com.laohu.standard.practice.idgenerator.old;
 
 import com.sun.org.slf4j.internal.Logger;
 import com.sun.org.slf4j.internal.LoggerFactory;
@@ -10,6 +10,22 @@ import java.util.Random;
 /**
  * @program: designmodel
  * @description: id生成器 (能用版本)
+ * 重构建议:
+ * 一.提高代码的可读性
+ * 1.hostName变量不应被重复使用,因为两次使用时的含义不一样;
+ * 2.将获取hostName变量的代码抽离,组成getLastfieldOfHostName() 函数;
+ * 3.删除代码中的魔法数;
+ * 4.将随机数代码生成抽离,定义为 generateRandomAlphameric() 函数;
+ * 5.三个if()判断逻辑重复,且复杂,对其进行简化;
+ * 6.提高扩展性,将类重名名,并抽象出接口;
+ *
+ * 二.提高代码的可测试性
+ * 1.generate() 函数定义为静态函数，会影响使用该函数的代码的可测试性;
+ * 2.generate() 函数的代码实现依赖运行环境（本机名）、时间函数、随机函数，所以 generate() 函数
+ * 本身的可测试性也不好;
+ *
+ * 三.完善单元测试
+ * 四.所有重构完成后,添加注释
  * @author: Holland
  * @create: 2021-08-06 16:47
  **/
