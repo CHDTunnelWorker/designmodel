@@ -1,20 +1,20 @@
 package com.laohu.principles.practice.counter.middle;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @program: designmodel
- * @description: 统计类,该类目前统计功能较多,未来统计增加时,可能出现该类职责不单一,且难以维护等问题
+ * @description: 统计类, 该类目前统计功能较多, 未来统计增加时, 可能出现该类职责不单一, 且难以维护等问题
  * @author: Holland
  * @create: 2021-07-31 17:19
  **/
-
 public class Aggregator {
 
     /**
      * @Description: 统计接口响应相关数据
+     * 该函数缺点:
+     * 1.大而全,扩展性差,越往后扩展统计功能,越难维护
      * @param: List<RequestInfo> requestInfos 原始数据集合
      * @param: long durationInMillis 统计间隔
      * @return: RequestSta 统计结果对象
@@ -78,6 +78,87 @@ public class Aggregator {
         requestStat.setCount(count);
         requestStat.setTps(tps);
         return requestStat;
+    }
+
+    /**
+     * @Description: 统计接口响应相关数据代码优化函数
+     * @param: Map<String, List < RequestInfo>> requestInfos 接口名称为key,统计数据集合为value
+     * @param: long durationInMillis 统计时间区间(ms)
+     * @return: Map<String, RequestSta> 接口名称为key,统计结果为value
+     * @auther: Holland
+     * @date: 2021/8/11 10:25 上午
+     */
+    public Map<String, RequestSta> aggregateOpti(Map<String, List<RequestInfo>> requestInfos, long durationInMillis) {
+        Map<String, RequestSta> requestStaMap = new HashMap<>();
+        for (Map.Entry<String, List<RequestInfo>> entry : requestInfos.entrySet()) {
+            String apiName = entry.getKey();
+            List<RequestInfo> requestInfosPerApi = entry.getValue();
+            //新增统计函数
+            RequestSta requestStat = doAggregate(requestInfosPerApi, durationInMillis);
+            requestStaMap.put(apiName, requestStat);
+        }
+        return requestStaMap;
+    }
+
+    /**
+     * @Description: 统计原始数据逻辑
+     * @param: List<RequestInfo> requestInfos 统计原始数据集合
+     * @param: long durationInMillis 统计时间区间(ms)
+     * @return: RequestSta 统计结果对象
+     * @auther: Holland
+     * @date: 2021/8/11 10:26 上午
+     */
+    private RequestSta doAggregate(List<RequestInfo> requestInfos, long durationInMillis) {
+        //每次请求时长的集合
+        List<Double> respTimes = new ArrayList<>();
+        for (RequestInfo requestInfo : requestInfos) {
+            double respTime = requestInfo.getResponseTime();
+            respTimes.add(respTime);
+        }
+
+        RequestSta requestSta = new RequestSta();
+        requestSta.setMaxResponseTime(max(respTimes));
+        requestSta.setMinResponseTime(min(respTimes));
+        requestSta.setAvgResponseTime(avg(respTimes));
+        requestSta.setP999ResponseTime(percentile999(respTimes));
+        requestSta.setP99ResponseTime(percentile99(respTimes));
+        requestSta.setCount(respTimes.size());
+        requestSta.setTps(tps(respTimes.size(), durationInMillis / 1000));
+        return requestSta;
+    }
+
+    private long tps(int count, double durationInMillis) {
+        long tps = (long) (count / durationInMillis * 1000);
+        return tps;
+    }
+
+    private double percentile99(List<Double> dataList) {
+        List<Double> sortList = dataList.stream().sorted().collect(Collectors.toList());
+        int size = sortList.size();
+        int index = (int) (size * 0.99);
+        return sortList.get(index);
+    }
+
+    private double percentile999(List<Double> dataList) {
+        List<Double> sortList = dataList.stream().sorted().collect(Collectors.toList());
+        int size = sortList.size();
+        int index = (int) (size * 0.999);
+        return sortList.get(index);
+    }
+
+    private double avg(List<Double> dataList) {
+        return dataList.stream().mapToDouble(data -> data).average().getAsDouble();
+    }
+
+    private double min(List<Double> dataList) {
+        List<Double> sortList = dataList.stream().sorted().collect(Collectors.toList());
+        return sortList.get(0);
+    }
+
+    private double max(List<Double> dataList) {
+        int size = dataList.size();
+        List<Double> sortList = dataList.stream().sorted().collect(Collectors.toList());
+        return sortList.get(size - 1);
     }
 
 }

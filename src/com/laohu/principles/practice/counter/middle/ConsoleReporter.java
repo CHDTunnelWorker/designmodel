@@ -18,14 +18,20 @@ import java.util.concurrent.TimeUnit;
  * @author: Holland
  * @create: 2021-07-31 17:27
  **/
-public class ConsoleReporter {
+public class ConsoleReporter extends ScheduledReporter {
 
-    private MetricsStorage metricsStorage;
     private ScheduledExecutorService executor;
 
-    public ConsoleReporter(MetricsStorage metricsStorage) {
-        this.metricsStorage = metricsStorage;
+    public ConsoleReporter(MetricsStorage metricsStorage, Aggregator aggregator, StaViewer staViewer) {
+        super(metricsStorage, aggregator, staViewer);
         this.executor = Executors.newSingleThreadScheduledExecutor();
+    }
+
+    /**
+     * 为了使框架更易用,提供默认依赖的构造函数
+     */
+    public ConsoleReporter() {
+        this(new RedisMetricsStorage(), new Aggregator(), new ConsoleViewer());
     }
 
     /**
@@ -43,20 +49,8 @@ public class ConsoleReporter {
                 long durationInMillis = durationInSeconds * 1000;
                 long endTimeInMillis = System.currentTimeMillis();
                 long startTimeInMillis = endTimeInMillis - durationInMillis;
-                Map<String, List<RequestInfo>> requestInfos = metricsStorage.getRequestInfos(startTimeInMillis, endTimeInMillis);
-
-                Map<String, RequestSta> stats = new HashMap<>();
-                for (Map.Entry<String, List<RequestInfo>> entry : requestInfos.entrySet()) {
-                    String apiName = entry.getKey();
-                    List<RequestInfo> requestInfosPerApi = entry.getValue();
-                    //统计计算请求数据
-                    RequestSta requestSta = Aggregator.aggregate(requestInfosPerApi, durationInMillis);
-                    stats.put(apiName, requestSta);
-                }
-
-                //将统计数据显示到终端
-                Gson gson = new Gson();
-                System.out.println(gson.toJson(stats));
+                //复用统计并展示的逻辑
+                doStaAndReport(startTimeInMillis, endTimeInMillis);
             }
         }, 0, periodInSeconds, TimeUnit.SECONDS);
     }

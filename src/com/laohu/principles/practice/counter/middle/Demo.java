@@ -1,5 +1,8 @@
 package com.laohu.principles.practice.counter.middle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @program: designmodel
  * @description: 执行入口
@@ -9,15 +12,18 @@ package com.laohu.principles.practice.counter.middle;
 
 public class Demo {
     public static void main(String[] args) {
-        MetricsStorage storage = new RedisMetricsStorage();
-        ConsoleReporter consoleReporter = new ConsoleReporter(storage);
+        //定时触发统计,并将结果显示到终端
+        ConsoleReporter consoleReporter = new ConsoleReporter();
         consoleReporter.startRepeatedReport(60, 60);
 
-        EmailReporter emailReporter = new EmailReporter(storage);
-        emailReporter.addToAddress("laohu@qq.com");
+        //定时触发统计并将结果输出到邮件
+        List<String> emailToAddresses = new ArrayList<>();
+        emailToAddresses.add("laohu@qq.com");
+        EmailReporter emailReporter = new EmailReporter(emailToAddresses);
         emailReporter.startDailyReport();
 
-        MetricsController collector = new MetricsController(storage);
+        //收集接口访问数据
+        MetricsController collector = new MetricsController();
         collector.recordRequestInfo(new RequestInfo("register", 123, 10234));
         collector.recordRequestInfo(new RequestInfo("register", 223, 11234));
         collector.recordRequestInfo(new RequestInfo("register", 323, 12334));

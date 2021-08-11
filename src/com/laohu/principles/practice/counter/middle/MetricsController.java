@@ -1,7 +1,5 @@
 package com.laohu.principles.practice.counter.middle;
 
-import com.sun.deploy.util.StringUtils;
-
 /**
  * @program: designmodel
  * @description: 统计接口
@@ -14,9 +12,18 @@ public class MetricsController {
      */
     private MetricsStorage metricsStorage;
 
-    //依赖注入
+    /**
+     * 依赖注入
+     */
     public MetricsController(MetricsStorage metricsStorage) {
         this.metricsStorage = metricsStorage;
+    }
+
+    /**
+     * 为了使框架更易用,提供默认依赖的构造函数
+     */
+    public MetricsController(){
+        this(new RedisMetricsStorage());
     }
 
     //保存原始数据,相对于最小原型,将两个函数合为一个
