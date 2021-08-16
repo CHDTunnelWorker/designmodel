@@ -1,12 +1,12 @@
-package com.laohu.model.factory.simple;
+package com.laohu.model.create.factory.simple;
 
 /**
  * @program: designmodel
- * @description: Properties文件配置解析器
+ * @description: yaml文件配置解析器
  * @author: Holland
  * @create: 2021-08-13 11:29
  **/
-public class PropertiesRuleConfigParser implements IRuleConfigParser{
+public class YamlRuleConfigParser implements IRuleConfigParser{
     /**
      * @Description: 省略实现
      * @param: String configText

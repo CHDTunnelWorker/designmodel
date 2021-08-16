@@ -1,7 +1,6 @@
-package com.laohu.model.factory.method;
+package com.laohu.model.create.factory.method;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**

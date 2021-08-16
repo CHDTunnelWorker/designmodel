@@ -1,4 +1,4 @@
-package com.laohu.model.factory.simple;
+package com.laohu.model.create.factory.simple;
 
 /**
  * @program: designmodel

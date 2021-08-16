@@ -1,4 +1,4 @@
-package com.laohu.model.builder;
+package com.laohu.model.create.builder;
 
 /**
  * @program: designmodel

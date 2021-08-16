@@ -1,7 +1,7 @@
-package com.laohu.model.factory.method;
+package com.laohu.model.create.factory.method;
 
-import com.laohu.model.factory.simple.IRuleConfigParser;
-import com.laohu.model.factory.simple.YamlRuleConfigParser;
+import com.laohu.model.create.factory.simple.IRuleConfigParser;
+import com.laohu.model.create.factory.simple.YamlRuleConfigParser;
 
 /**
  * @program: designmodel

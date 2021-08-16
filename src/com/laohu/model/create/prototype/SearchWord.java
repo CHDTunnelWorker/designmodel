@@ -1,4 +1,4 @@
-package com.laohu.model.prototype;
+package com.laohu.model.create.prototype;
 
 /**
  * @program: designmodel
